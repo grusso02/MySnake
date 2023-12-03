@@ -10,9 +10,13 @@ This project is a simple and classic implementation of the famous Snake game ğŸ
 
 ## Installed Ncurses
 
+Linux
 ```
-sudo apt-get install libncurses5-dev libncursesw5-dev #Linux
-brew install ncurses #MacOS
+sudo apt-get install libncurses5-dev libncursesw5-dev
+```
+MacOS
+```
+brew install ncurses
 ```
 
 # Compilation
