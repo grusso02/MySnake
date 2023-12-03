@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Drawable.hpp"
 
 namespace mysnake {

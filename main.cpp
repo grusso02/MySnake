@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-#define N 25
+#define N 15
 #define HEIGHT N
 #define WIDTH N * 2.5
 
@@ -13,6 +13,8 @@ using namespace mysnake;
 int main() {
     initscr();
     refresh();
+    noecho();
+    curs_set(0);
 
     Game game(HEIGHT, WIDTH);
 
@@ -22,8 +24,7 @@ int main() {
         game.redraw();
     }
 
-    getch();
     endwin();
-
+    std::cout << "Game Over!";
     return 0;
 }

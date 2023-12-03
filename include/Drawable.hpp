@@ -1,13 +1,14 @@
 #pragma once
+#include "ncurses.h"
 
 namespace mysnake {
 class Drawable {
   protected:
-    int  _y, _x;
-    char _ch;
+    int    _y, _x;
+    chtype _ch;
 
   public:
-    Drawable() {}
+    Drawable() : _y(0), _x(0), _ch(0) {}
 
     Drawable(int y, int x, char ch) {
         this->_y = y;
@@ -15,9 +16,11 @@ class Drawable {
         this->_ch = 'o';
     }
 
-    int getY() { return _y; }
+    int  getY() { return _y; }
+    void setY(int y) { this->_y = y; }
 
-    int getX() { return _x; }
+    int  getX() { return _x; }
+    void setX(int x) { this->_x = x; }
 
     char getCh() { return _ch; }
 };

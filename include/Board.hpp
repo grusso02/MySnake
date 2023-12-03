@@ -1,6 +1,6 @@
 #pragma once
-#include "Apple.hpp"
-#include "Empty.hpp"
+
+#include "Drawable.hpp"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,17 +10,23 @@ class Board {
   private:
     WINDOW* board;
     int     height, width;
+    int     timeout;
 
   public:
     Board() : height(0), width(0) {}
-    Board(int h, int w) : height(h), width(w) {
+    Board(int h, int w, int speed) : height(h), width(w) {
         int yMax, xMax;
         getmaxyx(stdscr, yMax, xMax);
-
+        this->timeout = speed;
         this->board = newwin(height, width, ((yMax / 2) - (this->height / 2)),
                              ((xMax / 2) - (this->width / 2)));
         keypad(board, true);
+        setTimeout(speed);
     };
+
+    int getHeight() { return height; }
+
+    int getWidth() { return width; }
 
     void initialize() {
         clear();
@@ -49,5 +55,10 @@ class Board {
     }
 
     int getInput() { return (wgetch(board)); }
+
+    chtype getCharAt(int y, int x) { return (mvwinch(board, y, x)); }
+
+    int  getTimeout() { return timeout; }
+    void setTimeout(int speed) { wtimeout(board, speed); }
 };
 } // namespace mysnake
