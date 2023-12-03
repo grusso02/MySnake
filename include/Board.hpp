@@ -10,7 +10,7 @@ namespace mysnake {
 class Board {
   private:
     WINDOW* board;
-    int     height, width;
+    int     height, width, start_row, start_col;
     int     timeout;
 
   public:
@@ -18,9 +18,10 @@ class Board {
     Board(int h, int w, int speed) : height(h), width(w) {
         int yMax, xMax;
         getmaxyx(stdscr, yMax, xMax);
+        this->start_row = ((yMax / 2) - (this->height / 2));
+        this->start_col = ((xMax / 2) - (this->width / 2));
         this->timeout = speed;
-        this->board = newwin(height, width, ((yMax / 2) - (this->height / 2)),
-                             ((xMax / 2) - (this->width / 2)));
+        this->board = newwin(height, width, start_row, start_col);
         keypad(board, true);
         setTimeout(speed);
     };
@@ -72,5 +73,9 @@ class Board {
 
     int  getTimeout() { return timeout; }
     void setTimeout(int speed) { wtimeout(board, speed); }
+
+    int getStartRow() { return start_row; }
+
+    int getStartCol() { return start_col; }
 };
 } // namespace mysnake

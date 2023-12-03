@@ -1,4 +1,3 @@
-#include "Board.hpp"
 #include "Game.hpp"
 #include <iostream>
 #include <ncurses.h>
@@ -25,6 +24,6 @@ int main() {
     }
 
     endwin();
-    std::cout << "Game Over!";
+    std::cout << "Game Over! Your score is: " << game.getScore();
     return 0;
 }

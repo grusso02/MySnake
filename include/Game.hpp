@@ -3,22 +3,28 @@
 #include "Apple.hpp"
 #include "Board.hpp"
 #include "Empty.hpp"
+#include "Scoreboard.hpp"
 #include "Snake.hpp"
 #include <ncurses.h>
 
 namespace mysnake {
 class Game {
   private:
-    Board  board;
-    bool   is_over;
-    Apple* apple;
-    Snake  snake;
+    Board      board;
+    bool       is_over;
+    Apple*     apple;
+    Snake      snake;
+    Scoreboard scoreboard;
+    int        score;
 
   public:
     Game() : board(), is_over(false), apple(nullptr) {}
 
     Game(int height, int width) {
         this->board = Board(height, width, 150);
+        int sb_row = board.getStartRow() + height;
+        int sb_col = board.getStartCol();
+        scoreboard = Scoreboard(width, sb_row, sb_col);
         initialize();
     }
 
@@ -28,11 +34,12 @@ class Game {
     }
 
     void initialize() {
-        board.initialize();
-        this->is_over = false;
         apple = NULL;
+        board.initialize();
+        score = 0;
+        this->is_over = false;
+        scoreboard.initialize(score);
         srand(time(NULL));
-
         snake.setCurrentDirection(DOWN);
         handleNextPiece(SnakePiece(1, 1));
 
@@ -59,6 +66,8 @@ class Game {
                 ;
             board.setTimeout(board.getTimeout());
         }
+        case 'e':
+            endGame();
         default:
             break;
         }
@@ -72,7 +81,28 @@ class Game {
         createApple();
     }
 
-    void redraw() { board.refresh(); }
+    void redraw() {
+        board.refresh();
+        scoreboard.refresh();
+    }
+
+    int getScore() { return score; }
+
+    void checkOverBoard(SnakePiece& piece) {
+        if (piece.getY() == (board.getHeight() - 1))
+            piece.setY(1);
+        if (!piece.getY())
+            piece.setY(board.getHeight() - 2);
+        if (piece.getX() == (board.getWidth() - 1))
+            piece.setX(1);
+        if (!piece.getX())
+            piece.setX(board.getWidth() - 2);
+    }
+
+    void checkCollision(SnakePiece& piece) {
+        if (board.getCharAt(piece.getY(), piece.getX()) == piece.getCh())
+            endGame();
+    }
 
     bool isOver() { return is_over; }
 
@@ -91,6 +121,8 @@ class Game {
             delete apple;
             apple = NULL;
         }
+        score += 100;
+        scoreboard.updateScore(score);
     }
 
     void handleNextPiece(SnakePiece piece) {
@@ -100,26 +132,10 @@ class Game {
             int emptyColumn = snake.tail().getX();
             board.print(Empty(emptyRow, emptyColumn));
             snake.removePiece();
-        } else
+        } else if (apple)
             destroyApple();
         board.print(piece);
         snake.addPiece(piece);
-    }
-
-    void checkOverBoard(SnakePiece& piece) {
-        if (piece.getY() == (board.getHeight() - 1))
-            piece.setY(1);
-        if (!piece.getY())
-            piece.setY(board.getHeight() - 2);
-        if (piece.getX() == (board.getWidth() - 1))
-            piece.setX(1);
-        if (!piece.getX())
-            piece.setX(board.getWidth() - 2);
-    }
-
-    void checkCollision(SnakePiece& piece) {
-        if (board.getCharAt(piece.getY(), piece.getX()) == piece.getCh())
-            endGame();
     }
 
     void endGame() { is_over = true; }
