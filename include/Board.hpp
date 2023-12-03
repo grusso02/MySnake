@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Drawable.hpp"
+#include "Time.hpp"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
@@ -54,7 +55,18 @@ class Board {
             continue;
     }
 
-    int getInput() { return (wgetch(board)); }
+    int getInput() {
+        time_t time_last_input = Time::milliseconds();
+
+        chtype input = wgetch(board);
+
+        setTimeout(0);
+        while (time_last_input + timeout >= Time::milliseconds())
+            ;
+        setTimeout(timeout);
+
+        return input;
+    }
 
     chtype getCharAt(int y, int x) { return (mvwinch(board, y, x)); }
 

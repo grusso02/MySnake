@@ -18,7 +18,7 @@ class Game {
     Game() : board(), is_over(false), apple(nullptr) {}
 
     Game(int height, int width) {
-        this->board = Board(height, width, 100);
+        this->board = Board(height, width, 150);
         initialize();
     }
 
@@ -53,9 +53,12 @@ class Game {
         case KEY_LEFT:
             snake.setCurrentDirection(LEFT);
             break;
-        case 'p':
+        case 'p': {
+            board.setTimeout(-1);
             while (board.getInput() != 'p')
                 ;
+            board.setTimeout(board.getTimeout());
+        }
         default:
             break;
         }
@@ -119,8 +122,6 @@ class Game {
             endGame();
     }
 
-    void endGame() {
-        is_over = true;
-    }
+    void endGame() { is_over = true; }
 };
 } // namespace mysnake

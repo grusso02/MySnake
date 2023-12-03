@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-#define N 15
+#define N 20
 #define HEIGHT N
 #define WIDTH N * 2.5
 
