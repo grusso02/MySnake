@@ -29,7 +29,7 @@ The code can be compiled using the script build.sh in the root dir.
 
 # Execution
 
-For start the game:
+To start the game:
 
 ```
 ./run.sh
