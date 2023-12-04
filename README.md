@@ -37,6 +37,6 @@ For start the game:
 
 # Game command
 
-Use the arrow key for move the snake.<br>
+Use the arrow keys to move the snake.<br>
 Press 'P' to pause the game.<br>
 Press 'E' to exit the game.
